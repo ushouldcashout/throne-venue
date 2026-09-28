@@ -24,6 +24,7 @@ async function day(d) {
   return { date: d, broker: BROKER, total, rows, snapshot_at: new Date().toISOString() };
 }
 
+fs.mkdirSync('data', { recursive: true });
 const days = [];
 for (let t = Date.parse(START + 'T00:00:00Z'); ymd(t) <= today; t += 864e5) days.push(ymd(t));
 let changed = 0;
