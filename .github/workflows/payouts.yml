@@ -1,0 +1,42 @@
+name: king drop payouts (compute)
+# Step 1 of 2. Computes payouts/week-N.json from the frozen result and commits it for review. Sends nothing.
+on:
+  schedule:
+    - cron: '30 2 * * MON'   # 02:30 UTC Monday, ~2.5h after the Sunday close; the Worker finalizes at close + 75 min
+  workflow_dispatch:
+    inputs:
+      week:
+        description: 'week number (blank = the week that just closed)'
+        required: false
+permissions:
+  contents: write
+concurrency:
+  group: payouts
+jobs:
+  compute:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: pick the week
+        id: wk
+        run: |
+          if [ -n "${{ github.event.inputs.week }}" ]; then echo "week=${{ github.event.inputs.week }}" >> $GITHUB_OUTPUT; exit 0; fi
+          # week 1 closes 2026-10-19T00:00Z; every week after closes 7 days later
+          NOW=$(date -u +%s); W1=$(date -u -d '2026-10-19T00:00:00Z' +%s)
+          if [ $NOW -lt $W1 ]; then echo "no week has closed yet"; echo "week=0" >> $GITHUB_OUTPUT; exit 0; fi
+          echo "week=$(( (NOW - W1) / 604800 + 1 ))" >> $GITHUB_OUTPUT
+      - name: compute
+        if: steps.wk.outputs.week != '0'
+        run: node scripts/payouts.mjs ${{ steps.wk.outputs.week }}
+      - name: commit plan
+        if: steps.wk.outputs.week != '0'
+        run: |
+          git config user.name "throne-venue-bot"
+          git config user.email "bot@throne.network"
+          git add payouts
+          if git diff --cached --quiet; then echo "no change"; exit 0; fi
+          git commit -m "payouts: week ${{ steps.wk.outputs.week }} plan (review before send)"
+          git push

@@ -1,0 +1,43 @@
+name: king drop payouts (send)
+# Step 2 of 2. Manual only. Transfers $THRONE per payouts/week-N.json from the payout wallet (secret PAYOUT_KEY).
+# Type SEND in the confirm box. Re-running is safe: wallets already paid are skipped (payouts/week-N.sent.json).
+on:
+  workflow_dispatch:
+    inputs:
+      week:
+        description: 'week number'
+        required: true
+      confirm:
+        description: 'type SEND to transfer tokens, anything else = dry run'
+        required: true
+        default: 'dry'
+permissions:
+  contents: write
+concurrency:
+  group: send
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm i --no-save viem@2
+      - name: dry run
+        if: github.event.inputs.confirm != 'SEND'
+        run: node scripts/send.mjs ${{ github.event.inputs.week }} --dry
+      - name: send
+        if: github.event.inputs.confirm == 'SEND'
+        env:
+          PAYOUT_KEY: ${{ secrets.PAYOUT_KEY }}
+        run: node scripts/send.mjs ${{ github.event.inputs.week }}
+      - name: commit receipts
+        if: always() && github.event.inputs.confirm == 'SEND'
+        run: |
+          git config user.name "throne-venue-bot"
+          git config user.email "bot@throne.network"
+          git add payouts
+          if git diff --cached --quiet; then echo "no change"; exit 0; fi
+          git commit -m "payouts: week ${{ github.event.inputs.week }} receipts"
+          git push
