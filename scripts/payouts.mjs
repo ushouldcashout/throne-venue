@@ -8,9 +8,12 @@
 //
 // Rules (docs.throne.network/points.html):
 //   72% of the pot -> every qualified wallet on the winning side, pro rata by that week's points
-//   18%            -> the winning side's sixteen pieces, weighted king 16 .. pawn 1 (qualified pieces only)
+//   18%            -> the winning side's sixteen pieces, weighted king 16 .. pawn 1, re-weighted over the QUALIFIED seats
 //   10%            -> the losing side's king (7%) and queen (3%), if qualified
-//   qualified = weekVol >= claimFloorUsd. Unpaid shares (unqualified wallets) stay in the treasury and are reported.
+//   qualified = weekVol >= claimFloorUsd. Every share of the pot is paid to qualified wallets: a piece seat that misses the
+//   floor (or is empty) passes its weight to the other qualified pieces; an unqualified losing king/queen's share, and the
+//   piece pool when no piece qualifies, roll into the winning side pool. Only a week with no qualified winning wallet at all
+//   leaves anything unallocated (reported, stays in treasury).
 //   draw          -> nothing is paid; the pot carries to the next week (reported, handled by POT_BY_WEEK in the Worker).
 import fs from 'node:fs';
 import crypto from 'node:crypto';
@@ -53,7 +56,7 @@ const W = res.winner;
 const entries = new Map(); // addr -> { amount, parts: {side, piece, kq} }
 const add = (addr, amt, part) => { if (!(amt > 0)) return; const e = entries.get(addr) || { wallet: addr, amount: 0, parts: {} }; e.amount += amt; e.parts[part] = (e.parts[part] || 0) + amt; entries.set(addr, e); };
 const qualified = (addr) => { const w = wallets[addr]; return !!(w && (w.qualified || (w.weekVol || 0) >= floor)); };
-let unallocated = { side: 0, piece: 0, kq: 0 };
+let unallocated = { side: 0 };
 
 if (!pot) { console.error('result has no pot; nothing to pay'); process.exit(1); }
 if (W === 'draw') {
@@ -62,23 +65,26 @@ if (W === 'draw') {
 }
 const L = W === 'white' ? 'black' : 'white';
 
-// 72%: winning side by week points, qualified only
-const sidePool = pot * split.sideShare;
+// Order: K/Q first and pieces second, because anything they cannot pay rolls into the side pool, which is paid last.
+let rollover = 0; // $THRONE that moves from the K/Q and piece pools into the winning side pool
+
+// 10%: losing king and queen, 7/3, qualified only; an unqualified (or missing) seat's share rolls into the side pool
+const kqPool = pot * split.trailingKQ;
+const lp = (res.pieces && res.pieces[L]) || [];
+[[0, split.kqWeights[0]], [1, split.kqWeights[1]]].forEach(([i, wgt]) => { const p = lp[i]; const amt = kqPool * wgt; if (p && qualified(p.addr)) add(p.addr, amt, 'kq'); else rollover += amt; });
+
+// 18%: winning pieces weighted king 16 .. pawn 1, re-weighted over the qualified seats only (empty and unqualified seats
+// pass their weight to the rest). No qualified piece at all -> the whole piece pool rolls into the side pool.
+const piecePool = pot * split.pieceShare;
+const pieces = ((res.pieces && res.pieces[W]) || []).filter(p => qualified(p.addr));
+const totalW = pieces.reduce((s, p) => s + (17 - p.rank), 0);
+if (totalW > 0) for (const p of pieces) add(p.addr, piecePool * ((17 - p.rank) / totalW), 'piece'); else rollover += piecePool;
+
+// 72% (+ rollover): winning side by week points, qualified only
+const sidePool = pot * split.sideShare + rollover;
 const winners = Object.entries(wallets).filter(([a, w]) => w.side === W && w.week > 0 && qualified(a));
 const denom = winners.reduce((s, [, w]) => s + w.week, 0);
 if (denom > 0) for (const [a, w] of winners) add(a, sidePool * (w.week / denom), 'side'); else unallocated.side += sidePool;
-
-// 18%: winning pieces weighted 16..1, qualified pieces only; unqualified seats' weight is not redistributed
-const piecePool = pot * split.pieceShare;
-const pieces = (res.pieces && res.pieces[W]) || [];
-const TOTAL_W = 136; // 16+15+...+1
-for (const p of pieces) { const wgt = 17 - p.rank; const amt = piecePool * (wgt / TOTAL_W); if (qualified(p.addr)) add(p.addr, amt, 'piece'); else unallocated.piece += amt; }
-unallocated.piece += piecePool * ((TOTAL_W - pieces.reduce((s, p) => s + (17 - p.rank), 0)) / TOTAL_W); // empty seats
-
-// 10%: losing king and queen, 7/3, qualified only
-const kqPool = pot * split.trailingKQ;
-const lp = (res.pieces && res.pieces[L]) || [];
-[[0, split.kqWeights[0]], [1, split.kqWeights[1]]].forEach(([i, wgt]) => { const p = lp[i]; const amt = kqPool * wgt; if (p && qualified(p.addr)) add(p.addr, amt, 'kq'); else unallocated.kq += amt; });
 
 const list = [...entries.values()].map(e => ({ ...e, amount: Math.round(e.amount * 1e6) / 1e6, wei: toWei(e.amount).toString(), name: (res.names && res.names[e.wallet] && (res.names[e.wallet].name || null)) || null })).sort((a, b) => b.amount - a.amount);
 const paid = list.reduce((s, e) => s + e.amount, 0);
@@ -87,10 +93,10 @@ const out = {
   hash: res.hash, hashVerified: recomputed === res.hash, computedAt: new Date().toISOString(),
   token: '0x72dc556fff14115c077a540921e5F35499a4DCa7', decimals: 18,
   counts: { entries: list.length, winningSideQualified: winners.length, winningSideTotal: Object.values(wallets).filter(w => w.side === W && w.week > 0).length },
-  totals: { paid: Math.round(paid * 1e6) / 1e6, unallocated: Math.round((unallocated.side + unallocated.piece + unallocated.kq) * 1e6) / 1e6, byPart: unallocated },
+  totals: { paid: Math.round(paid * 1e6) / 1e6, unallocated: Math.round(unallocated.side * 1e6) / 1e6, rolledIntoSidePool: Math.round(rollover * 1e6) / 1e6 },
   entries: list,
 };
 fs.mkdirSync('payouts', { recursive: true });
 fs.writeFileSync(`payouts/week-${week}.json`, JSON.stringify(out, null, 2));
-console.log(`week ${week}: ${W} wins. ${list.length} wallets, ${out.totals.paid.toLocaleString()} $THRONE to pay, ${out.totals.unallocated.toLocaleString()} unallocated (stays in treasury). hash ${recomputed.slice(0, 12)}… verified=${out.hashVerified}`);
+console.log(`week ${week}: ${W} wins. ${list.length} wallets, ${out.totals.paid.toLocaleString()} $THRONE to pay, ${out.totals.unallocated.toLocaleString()} unallocated, ${out.totals.rolledIntoSidePool.toLocaleString()} rolled into the side pool. hash ${recomputed.slice(0, 12)}… verified=${out.hashVerified}`);
 for (const e of list.slice(0, 20)) console.log(`  ${e.wallet}  ${e.amount.toLocaleString().padStart(12)}  ${Object.entries(e.parts).map(([k, v]) => k + ':' + Math.round(v)).join(' ')}`);
