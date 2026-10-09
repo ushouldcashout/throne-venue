@@ -17,6 +17,12 @@ jobs:
         with:
           node-version: 20
       - run: node scripts/snapshot.mjs
+      - name: referees (partner codes -> wallets; skips itself when the ORDERLY_* secrets are not set)
+        env:
+          ORDERLY_ACCOUNT_ID: ${{ secrets.ORDERLY_ACCOUNT_ID }}
+          ORDERLY_KEY: ${{ secrets.ORDERLY_KEY }}
+          ORDERLY_SECRET: ${{ secrets.ORDERLY_SECRET }}
+        run: node scripts/referees.mjs
       - name: commit if changed
         run: |
           git config user.name "throne-venue-bot"
