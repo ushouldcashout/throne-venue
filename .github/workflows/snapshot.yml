@@ -23,6 +23,8 @@ jobs:
           ORDERLY_KEY: ${{ secrets.ORDERLY_KEY }}
           ORDERLY_SECRET: ${{ secrets.ORDERLY_SECRET }}
         run: node scripts/referees.mjs
+      - name: pons creator fees (incremental, public RPC)
+        run: node scripts/pons.mjs || echo 'pons step failed, keeping previous data'
       - name: commit if changed
         run: |
           git config user.name "throne-venue-bot"
