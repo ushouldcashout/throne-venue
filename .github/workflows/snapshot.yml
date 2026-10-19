@@ -23,6 +23,8 @@ jobs:
           ORDERLY_KEY: ${{ secrets.ORDERLY_KEY }}
           ORDERLY_SECRET: ${{ secrets.ORDERLY_SECRET }}
         run: node scripts/referees.mjs
+      - name: holder minimums (lowest $THRONE balance per active wallet per week, public RPC)
+        run: node scripts/holds.mjs || echo 'holds step failed, keeping previous data'
       - name: pons creator fees (incremental, public RPC)
         run: node scripts/pons.mjs || echo 'pons step failed, keeping previous data'
       - name: fables pool (fees to LPs per day, from fables.fi indexer)
