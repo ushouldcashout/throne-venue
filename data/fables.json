@@ -84,16 +84,16 @@
    "feeUsd": 18.311982
   },
   "2026-10-20": {
-   "volumeUsd": 0,
-   "feeUsd": 0
+   "volumeUsd": 1217.669666,
+   "feeUsd": 48.706787
   }
  },
  "stats": {
-  "tvlUsd": 7761.4265871969,
-  "volumeUsd": 0,
+  "tvlUsd": 8209.20244715993,
+  "volumeUsd": 1217.669666,
   "volume30dUsd": 34712.721815000004,
-  "aprPct": 0,
-  "feesUsd": 0
+  "aprPct": 229.055534106658,
+  "feesUsd": 51.51680140065485
  },
- "updated": "2026-10-20T21:41:14.941Z"
+ "updated": "2026-10-20T21:51:13.652Z"
 }
