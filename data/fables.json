@@ -90,10 +90,10 @@
  },
  "stats": {
   "tvlUsd": 7761.4265871969,
-  "volumeUsd": 31.207258,
+  "volumeUsd": 0,
   "volume30dUsd": 34712.721815,
-  "aprPct": 5.87038944041024,
-  "feesUsd": 1.2482903199999993
+  "aprPct": 0,
+  "feesUsd": 0
  },
- "updated": "2026-10-20T16:01:15.994Z"
+ "updated": "2026-10-20T16:11:14.540Z"
 }
