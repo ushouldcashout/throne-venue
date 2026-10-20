@@ -1,1 +1,1 @@
-{"date":"2026-10-20","broker":"throne","total":0,"rows":[],"snapshot_at":"2026-10-20T00:01:12.890Z"}
+{"date":"2026-10-20","broker":"throne","total":1,"rows":[{"date":"2026-10-20","address":"0xd523e695b432d20ecdf5040326aa576ca70f2e23","account_id":"0x37a73e70a49f3c7e79e89f17202144846f851600a5f77c57e942b2849ce935b4","perp_volume":3150.15661,"perp_taker_volume":3150.15661,"perp_maker_volume":0,"realized_pnl":0,"total_fee":1.417572,"broker_fee":0.787538}],"snapshot_at":"2026-10-20T16:51:19.966Z"}
