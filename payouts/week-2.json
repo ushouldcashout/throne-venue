@@ -8,10 +8,7 @@
   "pot": 923000,
   "split": {
     "trailingKQ": 0.1,
-    "kqWeights": [
-      0.7,
-      0.3
-    ],
+    "kqWeights": [0.7, 0.3],
     "sideShare": 0.72,
     "pieceShare": 0.18
   },
@@ -19,38 +16,49 @@
   "hash": "6ac4919d8c35b027bcf9024efe9e43e0b80c0251815212bc61196d51aac30bd5",
   "hashVerified": true,
   "computedAt": "2026-10-26T07:59:41.838Z",
+  "revisedAt": "2026-10-26T18:45:00.000Z",
+  "revision": "The seated black king and queen did not clear the $20k taker floor, so the computed plan rolled the 10% trailing share (92,300) into the winning side's pool. Revised before sending: the trailing share is paid instead to the losing side's top two by week volume, 70/30, and the winning side's pool goes back to 72%. Same 923,000 total. Result hash unchanged. From week 3 the losing-side share follows week points, not season seats.",
   "token": "0x72dc556fff14115c077a540921e5F35499a4DCa7",
   "decimals": 18,
   "counts": {
-    "entries": 2,
+    "entries": 4,
     "winningSideQualified": 2,
-    "winningSideTotal": 7
+    "winningSideTotal": 7,
+    "losingSidePaid": 2
   },
   "totals": {
     "paid": 923000,
     "unallocated": 0,
-    "rolledIntoSidePool": 92300
+    "rolledIntoSidePool": 0
   },
   "entries": [
     {
       "wallet": "0x1f5fa0fcf048e453ef2a1f1485a8be1388162915",
-      "amount": 752523.293447,
-      "parts": {
-        "piece": 89003.57142857142,
-        "side": 663519.7220186683
-      },
-      "wei": "752523293447000000000000",
-      "name": null
+      "amount": 671612.07,
+      "parts": { "piece": 89003.57, "side": 582608.5 },
+      "wei": "671612070000000000000000",
+      "name": "DMND"
     },
     {
       "wallet": "0xa32f8d5a58efe260c98ea6f28c182bd7c28f5036",
-      "amount": 170476.706553,
-      "parts": {
-        "piece": 77136.42857142858,
-        "side": 93340.27798133176
-      },
-      "wei": "170476706553000000000000",
-      "name": null
+      "amount": 159087.93,
+      "parts": { "piece": 77136.43, "side": 81951.5 },
+      "wei": "159087930000000000000000",
+      "name": "Yousaf"
+    },
+    {
+      "wallet": "0xd523e695b432d20ecdf5040326aa576ca70f2e23",
+      "amount": 64610,
+      "parts": { "trailing": 64610 },
+      "wei": "64610000000000000000000",
+      "name": "TheBBLSavant"
+    },
+    {
+      "wallet": "0x8d3b0f647e2741f656cbaaf1b91584c71067d009",
+      "amount": 27690,
+      "parts": { "trailing": 27690 },
+      "wei": "27690000000000000000000",
+      "name": "SirDingusTheThird"
     }
   ]
 }
