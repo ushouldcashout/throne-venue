@@ -18,29 +18,39 @@
   "claimFloorUsd": 20000,
   "hash": "f86081abe44e609d7ac6106411a46f1274d9bdf05a042787f506c7b4f51643b1",
   "hashVerified": true,
-  "computedAt": "2026-11-02T09:45:33.446Z",
+  "computedAt": "2026-11-02T13:58:46.640Z",
   "token": "0x72dc556fff14115c077a540921e5F35499a4DCa7",
   "decimals": 18,
   "counts": {
-    "entries": 1,
+    "entries": 2,
     "winningSideQualified": 1,
     "winningSideTotal": 5
   },
   "totals": {
     "paid": 923000,
     "unallocated": 0,
-    "rolledIntoSidePool": 92300
+    "rolledIntoSidePool": 27690
   },
   "entries": [
     {
       "wallet": "0xa32f8d5a58efe260c98ea6f28c182bd7c28f5036",
-      "amount": 923000,
+      "amount": 858390,
       "parts": {
         "piece": 166140,
-        "side": 756860
+        "side": 692250
       },
-      "wei": "923000000000000000000000",
+      "wei": "858390000000000000000000",
+      "name": "Yousaf"
+    },
+    {
+      "wallet": "0xe6484ae747d88c1bc468e058d2f1f3908e4208e5",
+      "amount": 64610,
+      "parts": {
+        "trailing": 64610
+      },
+      "wei": "64610000000000000000000",
       "name": null
     }
-  ]
+  ],
+  "rule": "From week 3 the 10% trailing share goes to the losing side's top two wallets by that week's points (7%/3%), qualified only; an unqualified seat's share rolls into the winning side pool. Black's #2 this week (0xd523..., $4,234 taker) is below the $20,000 floor, so its 27,690 rolled to the winning side."
 }
