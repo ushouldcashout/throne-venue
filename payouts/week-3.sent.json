@@ -1,0 +1,26 @@
+{
+  "week": 3,
+  "token": "0x72dc556fff14115c077a540921e5F35499a4DCa7",
+  "transfers": {
+    "0xa32f8d5a58efe260c98ea6f28c182bd7c28f5036": {
+      "status": "ok",
+      "tx": "0x2b7801b0cda136b84dd280266d58bdfb7e9d6ab6467703115df2dc0d462e74fe",
+      "amount": 858390,
+      "wei": "858390000000000000000000",
+      "at": "2026-11-03T03:08:17.394Z"
+    },
+    "0xe6484ae747d88c1bc468e058d2f1f3908e4208e5": {
+      "status": "ok",
+      "tx": "0x78f33f95bafdcf3cd87bb9e00323a9aaf886c7c0ca9f5009a3b6df2ed9e2d4ce",
+      "amount": 64610,
+      "wei": "64610000000000000000000",
+      "at": "2026-11-03T03:08:18.992Z"
+    }
+  },
+  "summary": {
+    "ok": 2,
+    "failed": 0,
+    "total": 2,
+    "finishedAt": "2026-11-03T03:08:18.992Z"
+  }
+}
