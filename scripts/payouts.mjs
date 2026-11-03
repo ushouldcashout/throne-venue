@@ -9,7 +9,8 @@
 // Rules (docs.throne.network/points.html):
 //   72% of the pot -> every qualified wallet on the winning side, pro rata by that week's points
 //   18%            -> the winning side's sixteen pieces, weighted king 16 .. pawn 1, re-weighted over the QUALIFIED seats
-//   10%            -> the losing side's king (7%) and queen (3%), if qualified
+//   10%            -> from week 3: the losing side's top two wallets BY THAT WEEK'S POINTS (7% / 3%), if qualified
+//                     (weeks 1-2: the losing side's seated king and queen; week 2 was revised by hand to the same rule)
 //   qualified = weekVol >= claimFloorUsd. Every share of the pot is paid to qualified wallets: a piece seat that misses the
 //   floor (or is empty) passes its weight to the other qualified pieces; an unqualified losing king/queen's share, and the
 //   piece pool when no piece qualifies, roll into the winning side pool. Only a week with no qualified winning wallet at all
@@ -70,8 +71,12 @@ let rollover = 0; // $THRONE that moves from the K/Q and piece pools into the wi
 
 // 10%: losing king and queen, 7/3, qualified only; an unqualified (or missing) seat's share rolls into the side pool
 const kqPool = pot * split.trailingKQ;
-const lp = (res.pieces && res.pieces[L]) || [];
-[[0, split.kqWeights[0]], [1, split.kqWeights[1]]].forEach(([i, wgt]) => { const p = lp[i]; const amt = kqPool * wgt; if (p && qualified(p.addr)) add(p.addr, amt, 'kq'); else rollover += amt; });
+// From week 3 the trailing share follows the WEEK, not the season: the losing side's top two wallets by this week's points.
+// A seat that is unqualified or missing rolls its share into the winning side pool, as before.
+const lp = week >= 3
+  ? Object.entries(wallets).filter(([, w]) => w.side === L && w.week > 0).sort((a, b) => b[1].week - a[1].week).slice(0, 2).map(([addr]) => ({ addr }))
+  : ((res.pieces && res.pieces[L]) || []);
+[[0, split.kqWeights[0]], [1, split.kqWeights[1]]].forEach(([i, wgt]) => { const p = lp[i]; const amt = kqPool * wgt; if (p && qualified(p.addr)) add(p.addr, amt, week >= 3 ? 'trailing' : 'kq'); else rollover += amt; });
 
 // 18%: winning pieces weighted king 16 .. pawn 1, re-weighted over the qualified seats only (empty and unqualified seats
 // pass their weight to the rest). No qualified piece at all -> the whole piece pool rolls into the side pool.
@@ -86,7 +91,7 @@ const winners = Object.entries(wallets).filter(([a, w]) => w.side === W && w.wee
 const denom = winners.reduce((s, [, w]) => s + w.week, 0);
 if (denom > 0) for (const [a, w] of winners) add(a, sidePool * (w.week / denom), 'side'); else unallocated.side += sidePool;
 
-const list = [...entries.values()].map(e => ({ ...e, amount: Math.round(e.amount * 1e6) / 1e6, wei: toWei(e.amount).toString(), name: (res.names && res.names[e.wallet] && (res.names[e.wallet].name || null)) || null })).sort((a, b) => b.amount - a.amount);
+const list = [...entries.values()].map(e => ({ ...e, parts: Object.fromEntries(Object.entries(e.parts).map(([k, v]) => [k, Math.round(v * 1e6) / 1e6])), amount: Math.round(e.amount * 1e6) / 1e6, wei: toWei(e.amount).toString(), name: (res.names && res.names[e.wallet] && (res.names[e.wallet].name || null)) || null })).sort((a, b) => b.amount - a.amount);
 const paid = list.reduce((s, e) => s + e.amount, 0);
 const out = {
   week, season: res.season, start: res.start, end: res.end, closes: res.closes, winner: W, pot, split, claimFloorUsd: floor,
