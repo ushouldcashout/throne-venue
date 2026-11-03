@@ -140,8 +140,8 @@
    "feeUsd": 0
   },
   "2026-11-03": {
-   "volumeUsd": 0,
-   "feeUsd": 0
+   "volumeUsd": 9.492826,
+   "feeUsd": 0.379713
   }
  },
  "stats": {
@@ -151,5 +151,5 @@
   "aprPct": 0,
   "feesUsd": 0
  },
- "updated": "2026-11-03T23:01:06.558Z"
+ "updated": "2026-11-03T23:11:06.502Z"
 }
