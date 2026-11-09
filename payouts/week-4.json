@@ -1,0 +1,55 @@
+{
+  "week": 4,
+  "season": "zero",
+  "start": "2026-11-02",
+  "end": "2026-11-08",
+  "closes": 1794182400000,
+  "winner": "white",
+  "pot": 923000,
+  "split": {
+    "trailingKQ": 0.1,
+    "kqWeights": [
+      0.7,
+      0.3
+    ],
+    "sideShare": 0.72,
+    "pieceShare": 0.18
+  },
+  "claimFloorUsd": 20000,
+  "hash": "4df81add7a21ffc655ce6970de64fb8c593af01b57799d80eafb336b01caa831",
+  "hashVerified": true,
+  "computedAt": "2026-11-09T10:02:10.983Z",
+  "token": "0x72dc556fff14115c077a540921e5F35499a4DCa7",
+  "decimals": 18,
+  "counts": {
+    "entries": 2,
+    "winningSideQualified": 1,
+    "winningSideTotal": 2
+  },
+  "totals": {
+    "paid": 923000,
+    "unallocated": 0,
+    "rolledIntoSidePool": 27690
+  },
+  "entries": [
+    {
+      "wallet": "0xa32f8d5a58efe260c98ea6f28c182bd7c28f5036",
+      "amount": 858390,
+      "parts": {
+        "piece": 166140,
+        "side": 692250
+      },
+      "wei": "858390000000000000000000",
+      "name": null
+    },
+    {
+      "wallet": "0x8d3b0f647e2741f656cbaaf1b91584c71067d009",
+      "amount": 64610,
+      "parts": {
+        "trailing": 64610
+      },
+      "wei": "64610000000000000000000",
+      "name": null
+    }
+  ]
+}
