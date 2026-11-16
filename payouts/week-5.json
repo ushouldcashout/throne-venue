@@ -1,0 +1,35 @@
+{
+  "week": 5,
+  "season": "zero",
+  "start": "2026-11-09",
+  "end": "2026-11-15",
+  "closes": 1794787200000,
+  "winner": "black",
+  "pot": 923000,
+  "split": {
+    "trailingKQ": 0.1,
+    "kqWeights": [
+      0.7,
+      0.3
+    ],
+    "sideShare": 0.72,
+    "pieceShare": 0.18
+  },
+  "claimFloorUsd": 20000,
+  "hash": "d1d2612183186cb85ba67a2e29b68f7bfbc80f2c38599be44294f51ebca09008",
+  "hashVerified": true,
+  "computedAt": "2026-11-16T09:59:54.395Z",
+  "token": "0x72dc556fff14115c077a540921e5F35499a4DCa7",
+  "decimals": 18,
+  "counts": {
+    "entries": 0,
+    "winningSideQualified": 0,
+    "winningSideTotal": 1
+  },
+  "totals": {
+    "paid": 0,
+    "unallocated": 923000,
+    "rolledIntoSidePool": 258440
+  },
+  "entries": []
+}
