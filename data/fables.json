@@ -194,14 +194,18 @@
   "2026-11-16": {
    "volumeUsd": 0,
    "feeUsd": 0
+  },
+  "2026-11-17": {
+   "volumeUsd": 0,
+   "feeUsd": 0
   }
  },
  "stats": {
   "tvlUsd": 226.997088376793,
   "volumeUsd": 0,
-  "volume30dUsd": 4629.155425,
+  "volume30dUsd": 4629.120580999999,
   "aprPct": 0,
   "feesUsd": 0
  },
- "updated": "2026-11-17T00:00:26.887Z"
+ "updated": "2026-11-17T00:10:25.549Z"
 }
