@@ -1,0 +1,14 @@
+{
+  "week": 6,
+  "season": "zero",
+  "pot": 923000,
+  "winner": "draw",
+  "hash": "00c5e2542126e71054871c6d568440157be7a2ce261e1c29f6e605664f001018",
+  "computedAt": "2026-11-23T10:59:17.497Z",
+  "entries": [],
+  "totals": {
+    "paid": 0,
+    "unallocated": 923000
+  },
+  "note": "draw: no payout, the pot carries to the next week"
+}
