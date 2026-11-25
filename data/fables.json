@@ -3,6 +3,10 @@
  "market": "THRONE / USDG",
  "source": "fables.fi indexer (PoolVolumeHistoryBatch MAX, PoolStats)",
  "days": {
+  "2026-09-28": {
+   "volumeUsd": 8783.438659,
+   "feeUsd": 351.337546
+  },
   "2026-09-30": {
    "volumeUsd": 1.966418,
    "feeUsd": 0.078657
@@ -24,8 +28,8 @@
    "feeUsd": 61.735857
   },
   "2026-10-05": {
-   "volumeUsd": 1806.633444,
-   "feeUsd": 72.265338
+   "volumeUsd": 20808.324464,
+   "feeUsd": 848.891134
   },
   "2026-10-06": {
    "volumeUsd": 3150.247114,
@@ -52,8 +56,8 @@
    "feeUsd": 81.43459
   },
   "2026-10-12": {
-   "volumeUsd": 826.141732,
-   "feeUsd": 40.499386
+   "volumeUsd": 4715.390572,
+   "feeUsd": 209.883043
   },
   "2026-10-13": {
    "volumeUsd": 0,
@@ -80,8 +84,8 @@
    "feeUsd": 0
   },
   "2026-10-19": {
-   "volumeUsd": 405.56812,
-   "feeUsd": 18.311982
+   "volumeUsd": 4223.833943,
+   "feeUsd": 178.646995
   },
   "2026-10-20": {
    "volumeUsd": 2124.63577,
@@ -108,8 +112,8 @@
    "feeUsd": 2.547292
   },
   "2026-10-26": {
-   "volumeUsd": 15.114977,
-   "feeUsd": 0.755749
+   "volumeUsd": 126.412235,
+   "feeUsd": 6.320524
   },
   "2026-10-27": {
    "volumeUsd": 0,
@@ -136,8 +140,8 @@
    "feeUsd": 0
   },
   "2026-11-02": {
-   "volumeUsd": 0,
-   "feeUsd": 0
+   "volumeUsd": 278.874403,
+   "feeUsd": 13.848792
   },
   "2026-11-03": {
    "volumeUsd": 9.492826,
@@ -231,9 +235,9 @@
  "stats": {
   "tvlUsd": 210.684656962401,
   "volumeUsd": 0,
-  "volume30dUsd": 462.70153700000003,
+  "volume30dUsd": 405.286638,
   "aprPct": 0,
   "feesUsd": 0
  },
- "updated": "2026-11-24T15:40:49.262Z"
+ "updated": "2026-11-25T00:10:08.371Z"
 }
